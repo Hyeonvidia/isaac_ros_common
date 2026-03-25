@@ -1,5 +1,8 @@
 # Ignore all pycache files
 **/__pycache__/**
 
+# Ignore colcon build artifacts
+**/build/
+
 # Ignore config files
 .isaac_ros_common-config
