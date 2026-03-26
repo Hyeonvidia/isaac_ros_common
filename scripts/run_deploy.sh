@@ -112,6 +112,16 @@ else
     DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
 fi
 
+# --- Jetson power optimization ---
+if [[ "${PLATFORM}" == "aarch64" ]] && command -v nvpmodel &>/dev/null; then
+    CURRENT_MODE=$(nvpmodel -q 2>/dev/null | grep -oP 'NV Power Mode: \K\w+' || true)
+    if [[ "${CURRENT_MODE}" != "MAXN" ]]; then
+        print_warning "Setting Jetson to MAXN power mode for best performance"
+        sudo nvpmodel -m 0 2>/dev/null || true
+    fi
+    sudo jetson_clocks 2>/dev/null || true
+fi
+
 print_info "Running deploy container: ${CONTAINER_NAME}"
 print_info "  Image: ${DEPLOY_IMAGE_NAME}"
 
