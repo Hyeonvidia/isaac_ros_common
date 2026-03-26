@@ -88,6 +88,9 @@ DOCKER_ARGS+=("-e DISPLAY")
 # --- NVIDIA GPU ---
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 
+# --- Isaac ROS workspace (needed by model install scripts) ---
+DOCKER_ARGS+=("-e ISAAC_ROS_WS=/workspaces/isaac_ros-dev")
+
 # --- ROS ---
 if [[ ! -z "${ROS_DOMAIN_ID}" ]]; then
     DOCKER_ARGS+=("-e ROS_DOMAIN_ID=${ROS_DOMAIN_ID}")
