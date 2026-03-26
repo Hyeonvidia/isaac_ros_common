@@ -107,6 +107,12 @@ ISAAC_ROS_ASSETS_DIR="${ISAAC_ROS_ASSETS_DIR:-/mnt/nova_ssd/isaac_ros_assets}"
 mkdir -p "${ISAAC_ROS_ASSETS_DIR}"
 DOCKER_ARGS+=("-v ${ISAAC_ROS_ASSETS_DIR}:/workspaces/isaac_ros-dev/isaac_ros_assets")
 
+# --- RViz config (host-editable, changes reflected without rebuild) ---
+RVIZ_CONFIG_DIR="${RVIZ_CONFIG_DIR:-/mnt/nova_ssd/workspaces/isaac_ros-dev/config}"
+if [[ -d "${RVIZ_CONFIG_DIR}" ]]; then
+    DOCKER_ARGS+=("-v ${RVIZ_CONFIG_DIR}:/workspaces/isaac_ros-dev/install/isaac_ros_perceptor_realsense_d456/share/isaac_ros_perceptor_realsense_d456/config/rviz")
+fi
+
 # --- Jetson / aarch64-specific volumes ---
 if [[ "${PLATFORM}" == "aarch64" ]]; then
     DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=nvidia.com/gpu=all,nvidia.com/pva=all")
