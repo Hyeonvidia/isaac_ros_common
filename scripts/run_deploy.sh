@@ -99,6 +99,11 @@ DOCKER_ARGS+=("-v /etc/localtime:/etc/localtime:ro")
 # --- RealSense USB device access ---
 DOCKER_ARGS+=("-v /dev:/dev")
 
+# --- DNN model cache (persists across container restarts) ---
+ISAAC_ROS_ASSETS_DIR="${ISAAC_ROS_ASSETS_DIR:-/mnt/nova_ssd/isaac_ros_assets}"
+mkdir -p "${ISAAC_ROS_ASSETS_DIR}"
+DOCKER_ARGS+=("-v ${ISAAC_ROS_ASSETS_DIR}:/workspaces/isaac_ros-dev/isaac_ros_assets")
+
 # --- Jetson / aarch64-specific volumes ---
 if [[ "${PLATFORM}" == "aarch64" ]]; then
     DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=nvidia.com/gpu=all,nvidia.com/pva=all")
