@@ -39,9 +39,13 @@ while [ : ]; do
             shift
             ;;
         -h | --help)
-            echo "Usage: run_deploy.sh [-s|--shell]"
-            echo "  (no args)      Auto-start ROS launch file inside deploy container"
-            echo "  -s, --shell    Open interactive bash for debugging"
+            echo "Usage: run_deploy.sh [-s|--shell] [launch_args...]"
+            echo "  (no args)                  Auto-start with default mode (static)"
+            echo "  mode:=dynamic              Dynamic scene reconstruction"
+            echo "  mode:=people_segmentation  People segmentation (requires DNN model)"
+            echo "  mode:=people_detection     People detection (requires DNN model)"
+            echo "  run_rviz:=False            Headless mode"
+            echo "  -s, --shell                Open interactive bash for debugging"
             exit 0
             ;;
         --) shift; break ;;
@@ -122,6 +126,8 @@ if [[ "${PLATFORM}" == "aarch64" ]] && command -v nvpmodel &>/dev/null; then
     sudo jetson_clocks 2>/dev/null || true
 fi
 
+LAUNCH_ARGS="$@"
+
 print_info "Running deploy container: ${CONTAINER_NAME}"
 print_info "  Image: ${DEPLOY_IMAGE_NAME}"
 
@@ -137,7 +143,7 @@ if [[ ${INTERACTIVE_SHELL} -eq 1 ]]; then
         "${DEPLOY_IMAGE_NAME}" \
         /bin/bash
 else
-    print_info "Auto-starting: ros2 launch ${LAUNCH_PACKAGE} ${LAUNCH_FILE}"
+    print_info "Auto-starting: ros2 launch ${LAUNCH_PACKAGE} ${LAUNCH_FILE} ${LAUNCH_ARGS}"
     docker run -it --rm \
         --privileged \
         --network host \
@@ -145,5 +151,6 @@ else
         --runtime nvidia \
         ${DOCKER_ARGS[@]} \
         --name "${CONTAINER_NAME}" \
-        "${DEPLOY_IMAGE_NAME}"
+        "${DEPLOY_IMAGE_NAME}" \
+        bash -c "ros2 launch ${LAUNCH_PACKAGE} ${LAUNCH_FILE} ${LAUNCH_ARGS}"
 fi
