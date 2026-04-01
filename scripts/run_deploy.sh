@@ -14,9 +14,9 @@ if [[ -f $ROOT/.isaac_ros_common-config.local ]]; then
     source $ROOT/.isaac_ros_common-config.local
 fi
 
-# Detect current Git branch dynamically to pick the correct image
+# Automatically detect branch for the container name but use latest image
 GIT_BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
-DEPLOY_FULL_IMAGE="${DEPLOY_IMAGE_NAME}:${GIT_BRANCH}"
+DEPLOY_FULL_IMAGE="${DEPLOY_IMAGE_NAME}:latest"
 
 echo "Git branch detected: ${GIT_BRANCH}. Target deploy image: ${DEPLOY_FULL_IMAGE}"
 
@@ -38,6 +38,7 @@ fi
 
 DOCKER_ARGS+=("-e ROS_DOMAIN_ID")
 DOCKER_ARGS+=("-e ROS_WS=/workspaces/isaac_ros-dev")
+DOCKER_ARGS+=("--runtime=nvidia")
 
 echo "Running deploy container: $CONTAINER_NAME from image: ${DEPLOY_FULL_IMAGE}"
 
