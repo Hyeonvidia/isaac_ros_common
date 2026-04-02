@@ -1,0 +1,11 @@
+CONFIG_IMAGE_KEY=ros2_humble.realsense
+
+# Deploy configuration for isaac_ros_perceptor_orin_nx
+BASE_IMAGE_KEY=aarch64.ros2_humble.realsense
+DEPLOY_IMAGE_NAME=isaac_ros_perceptor_orin_nx
+ROS_WS=/home/unitree/workspaces/isaac_ros-dev
+LAUNCH_PACKAGE=isaac_ros_perceptor_orin_nx
+LAUNCH_FILE=perceptor_orin_nx.launch.py
+# Note: if ros-humble-nvblox-rviz-plugin is available in apt, append it here.
+# Check inside dev container: apt-cache search nvblox | grep rviz
+INSTALL_DEBIANS_CSV=ros-humble-rviz2,ros-humble-rviz-default-plugins,ros-humble-rviz-common,ros-humble-isaac-ros-managed-nitros,ros-humble-isaac-ros-nitros-image-type,ros-humble-isaac-ros-nitros-camera-info-type,ros-humble-isaac-ros-visual-slam-interfaces

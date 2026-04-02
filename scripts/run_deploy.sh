@@ -28,6 +28,7 @@ DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
 DOCKER_ARGS+=("-v $HOME/.Xauthority:/root/.Xauthority:rw")
 DOCKER_ARGS+=("-e XAUTHORITY=/root/.Xauthority")
 DOCKER_ARGS+=("-e DISPLAY")
+DOCKER_ARGS+=("-e LIBGL_ALWAYS_SOFTWARE=1")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 
@@ -39,6 +40,7 @@ fi
 DOCKER_ARGS+=("-e ROS_DOMAIN_ID")
 DOCKER_ARGS+=("-e ROS_WS=/workspaces/isaac_ros-dev")
 DOCKER_ARGS+=("--runtime=nvidia")
+DOCKER_ARGS+=("--ipc=host")
 
 echo "Running deploy container: $CONTAINER_NAME from image: ${DEPLOY_FULL_IMAGE}"
 
